@@ -38,6 +38,18 @@ public class interpreter{
         
         return fixedLines;
     }
+
+    public void read_input() {
+        Scanner sc = new Scanner(System.in);
+        registers[1] = sc.nextInt();
+    }
+
+    public int parse_r_type(String str) {
+        int x = str.strip("#");
+        return x;
+    }
+
+    
                 
             //ArrayList<String> words = line.split(" ");
             //int index = 0;
