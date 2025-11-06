@@ -104,9 +104,9 @@ def assembler(instructions):
                 binary.append("11000000")
             elif op == "exit":
                 binary.append("11100000")
-            if op in ['add','sub','set','jeq']:
+            elif op in ['add','sub','set','jeq']:
                 binary.append(operators[op]+registries[linesplit[1]]+registries[linesplit[2]])
-            if op == "j":
+            elif op == "j":
                 binary.append("100"+tobinary(int(linesplit[1])))
     return binary
 
