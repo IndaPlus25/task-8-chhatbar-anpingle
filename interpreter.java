@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 public class interpreter{
     private int[] registers = {0,1,2,3};
-    private String[] r = {"add","sub","set", "jeq"};
-    private String[] j = {"j"};
-    private String[] spec = {"input", "print","exit"};
     private ArrayList<String> lines = new ArrayList<>();
     public ArrayList<String> fileline(String filename) {
         lines = new ArrayList<>();
@@ -75,7 +72,76 @@ public class interpreter{
         int y = Integer.parseInt(x[1]);
         return y;
     }
-
+    private boolean isValidOp(String op){
+        return op.equals("add") || op.equals("sub") || op.equals("set") || op.equals("jeq") || op.equals("j") || op.equals("input") || op.equals("print") || op.equals("exit");
+    }
+    private boolean isInteger(String s){
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    private boolean isValidRegister(String s){
+        return s.equals("#1") || s.equals("#2") || s.equals("#3");
+    }
+    private boolean isValidImm(String s) {
+        return s.equals("0") || s.equals("1");
+    }
+    public boolean isValidInstructions(ArrayList<String> instructions){
+        int num = 0;
+        for (String line : instructions) {
+            num++;
+            if (line.isBlank()){
+                continue;
+            }
+            String[] words = line.split("\\s+");
+            String operator = words[0];
+            if (!isValidOp(operator)){
+                System.out.println("Syntax ERROR at line "+num+": Unknown operator " + operator +"");
+                return false;
+            }
+            switch (operator){
+                case "input":
+                case "print":
+                case "exit":
+                    if (words.length != 1){
+                        System.out.println("Syntax ERROR at line "+num+": Operator "+operator+" takes no arguments");
+                        return false;
+                    }
+                    break;
+                case "add":
+                case "sub":
+                case "set":
+                case "jeq":
+                    if (words.length != 4){
+                        System.out.println("Syntax ERROR at line "+num+": Operator "+operator+" requires 3 arguments");
+                        return false;
+                    }
+                    if (!isValidRegister(words[1]) || !isValidRegister(words[2])){
+                        System.out.println("Syntax ERROR at line "+num+": Invalid registry");
+                        return false;
+                    }
+                    if (!isValidImm(words[3])){
+                        System.out.println("Syntax ERROR at line "+num+": Imm must be either 0 or 1");
+                        return false;
+                    }
+                    break;
+                case "j":
+                    if (words.length != 2){
+                        System.out.println("Syntax ERROR at line "+num+": Operator "+operator+" requires 1 argument");
+                        return false;
+                    }
+                    if (!isInteger(words[1])){
+                        System.out.println("Syntax ERROR at line "+num+": Operator "+operator+" requires 1 INTEGER argument");
+                        return false;
+                    }
+                    break;
+            }
+        }
+        return true;
+    }
     public void parse_instructions(ArrayList<String> instructions){
         int i = 0;
         while (i < instructions.size()){
@@ -133,9 +199,9 @@ public class interpreter{
     public static void main(String[] args) {
         interpreter test = new interpreter();
         ArrayList<String> k = test.fileline("example.bbvv");
-        System.out.println(k);
         ArrayList<String> p = test.read_instructions(k);
-        System.out.println(p);
-        test.parse_instructions(p);
+        if (test.isValidInstructions(p)){
+            test.parse_instructions(p);
+        }
     }
 }
