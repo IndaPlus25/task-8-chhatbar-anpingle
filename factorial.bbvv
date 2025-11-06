@@ -1,0 +1,39 @@
+input
+                
+set #2 #1 0                 // #2 is now 5
+
+set #1 #0 0                 // #1 is now 0 
+
+jeq #2 #0 0                 // skip exit line if false
+exit
+
+jeq #3 #0 0                 // skip exit line if false
+exit
+
+add #1 #2 0                 // Add 5 to #1 once
+sub #3 #0 1                 // subtract 1 from counter
+
+jeq #3 #0 1                 // skip jumping back to start if counter reaches zero
+j -5                        // Otherwise jump to start of loop
+
+print                       // print #1 to stdout
+
+
+
+input n
+
+set #2 #1 0  
+
+    // variable to store the final factorial
+    int ans = n;
+
+    // Outer loop
+    for (int i = n - 1; i > 0; i--) {
+        int sum = 0;
+
+        // Inner loop
+        for (int j = 0; j < i; j++)
+            sum += ans;
+        ans = sum;
+    }
+    return ans;

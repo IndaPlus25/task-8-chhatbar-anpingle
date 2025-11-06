@@ -84,7 +84,7 @@ public class interpreter{
         }
     }
     private boolean isValidRegister(String s){
-        return s.equals("#1") || s.equals("#2") || s.equals("#3");
+        return s.equals("#0") || s.equals("#1") || s.equals("#2") || s.equals("#3");
     }
     private boolean isValidImm(String s) {
         return s.equals("0") || s.equals("1");
@@ -198,7 +198,7 @@ public class interpreter{
 
     public static void main(String[] args) {
         interpreter test = new interpreter();
-        ArrayList<String> k = test.fileline("example.bbvv");
+        ArrayList<String> k = test.fileline("multiply.bbvv");
         ArrayList<String> p = test.read_instructions(k);
         if (test.isValidInstructions(p)){
             test.parse_instructions(p);
