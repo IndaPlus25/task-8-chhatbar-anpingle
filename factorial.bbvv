@@ -24,7 +24,7 @@ j -5
 
 sub #4 #0 1 // decrease counter by 1
 set #3 #4 0 // set #3 to new count
-set #2 #1 0 // Copying result into #2 to use in 
+set #2 #1 0 // Copying result into #2 to use in loop above
 
 
 print
