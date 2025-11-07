@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class interpreter{
-    private int[] registers = {0,1,2,3};
+    private int[] registers = {0,1,2,3, 4};
     private ArrayList<String> lines = new ArrayList<>();
     public ArrayList<String> fileline(String filename) {
         lines = new ArrayList<>();
@@ -84,7 +84,7 @@ public class interpreter{
         }
     }
     private boolean isValidRegister(String s){
-        return s.equals("#0") || s.equals("#1") || s.equals("#2") || s.equals("#3");
+        return s.equals("#0") || s.equals("#1") || s.equals("#2") || s.equals("#3") || s.equals("#4");
     }
     private boolean isValidImm(String s) {
         return s.equals("0") || s.equals("1");
@@ -179,17 +179,16 @@ public class interpreter{
             else if (instruction.equals("j")){
                 i+=Integer.parseInt(nospace[1]);
             }
-            else if (instruction.equals("jeq")){
+            else if (instruction.equals("jeq")) {
                 int r1 = removehash(nospace[1]);
                 int r2 = removehash(nospace[2]);
                 int imm = Integer.parseInt(nospace[3]);
-                if (registers[r1]==registers[r2]){
-                    i+=imm;
-                }
-                else{
-                    if (imm==0){
-                        i+=1;
-                    }
+
+                boolean immFlag = (imm != 0);
+
+                if ((registers[r1] == registers[r2] && immFlag) ||
+                    (registers[r1] != registers[r2] && !immFlag)) {
+                    i += 1; 
                 }
             }
             i++;
@@ -198,7 +197,7 @@ public class interpreter{
 
     public static void main(String[] args) {
         interpreter test = new interpreter();
-        ArrayList<String> k = test.fileline("multiply.bbvv");
+        ArrayList<String> k = test.fileline("factorial.bbvv");
         ArrayList<String> p = test.read_instructions(k);
         if (test.isValidInstructions(p)){
             test.parse_instructions(p);
